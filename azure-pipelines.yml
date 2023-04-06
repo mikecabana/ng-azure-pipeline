@@ -19,7 +19,6 @@ stages:
       displayName: Install and cache dependencies
       steps:
         - task: Cache@2
-          displayName: Setup cache
           inputs:
             key: 'npm | "$(Agent.OS)" | package-lock.json'
             restoreKeys: |
@@ -28,5 +27,6 @@ stages:
           displayName: Cache npm
 
         - script: npm ci
-          displayName: Install dependencies
+          displayName: Install ci dependencies
   
+- stage: Build
