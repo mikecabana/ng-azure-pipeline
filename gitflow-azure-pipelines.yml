@@ -1,0 +1,32 @@
+trigger: 
+  - develop
+  - release/*
+  
+pr:
+  branches:
+    include:
+      - feature/*
+      - fix/*
+
+variables:
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  
+stages:
+- stage: InstallAndCacheDependencies
+  displayName: Install and cache dependencies
+  jobs:
+    - job: InstallAndCache
+      displayName: Install and cache dependencies
+      steps:
+        - task: Cache@2
+          displayName: Setup cache
+          inputs:
+            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            restoreKeys: |
+               npm | "$(Agent.OS)"
+            path: $(npm_config_cache)
+          displayName: Cache npm
+
+        - script: npm ci
+          displayName: Install dependencies
+  
